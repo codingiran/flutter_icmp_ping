@@ -22,17 +22,18 @@ typedef void(^StartupCallback)(BOOL success, NSError * _Nullable error);
 @property (weak, nonatomic, nullable) id<GBPingDelegate>      delegate;
 
 @property (copy, nonatomic, nullable) NSString                *host;
-@property (assign, atomic) NSTimeInterval           pingPeriod;
-@property (assign, atomic) NSTimeInterval           timeout;
-@property (assign, atomic) NSUInteger               payloadSize;
-@property (assign, atomic) NSUInteger               ttl;
-@property (assign, atomic) NSUInteger               count;
-@property (assign, atomic, readonly) BOOL           isPinging;
-@property (assign, atomic, readonly) BOOL           isReady;
-@property (assign, atomic) BOOL                     useIpv4;
-@property (assign, atomic) BOOL                     useIpv6;
+@property (assign, atomic) NSTimeInterval                     pingPeriod;
+@property (assign, atomic) NSTimeInterval                     timeout;
+@property (assign, atomic) NSUInteger                         payloadSize;
+@property (assign, atomic) NSUInteger                         ttl;
+@property (assign, atomic) NSUInteger                         count;
+@property (assign, atomic, readonly) BOOL                     isPinging;
+@property (assign, atomic, readonly) BOOL                     isReady;
+@property (assign, atomic) BOOL                               useIpv4;
+@property (assign, atomic) BOOL                               useIpv6;
+@property (copy, nonatomic, nullable) NSString                *bindInterface;
 
-@property (assign, atomic) BOOL                     debug;
+@property (assign, atomic) BOOL                               debug;
 
 -(void)setupWithBlock:(StartupCallback)callback;
 -(void)startPinging;

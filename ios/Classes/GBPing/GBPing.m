@@ -7,6 +7,7 @@
 //
 
 #import "GBPing.h"
+#import <net/if.h>
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
     #import <CFNetwork/CFNetwork.h>
@@ -62,6 +63,7 @@ static NSTimeInterval const kDefaultTimeout =           2.0;
     NSTimeInterval                                      _timeout;
     NSTimeInterval                                      _pingPeriod;
     NSTimeInterval                                      _endTime;
+    NSString                                            *_bindInterface;
 }
 
 #pragma mark - custom acc
@@ -182,6 +184,30 @@ static NSTimeInterval const kDefaultTimeout =           2.0;
         }
         else {
             return _pingPeriod;
+        }
+    }
+}
+
+- (void)setBindInterface:(NSString *)bindInterface {
+    @synchronized(self) {
+        if (self.isPinging) {
+            if (self.debug) {
+                NSLog(@"GBPing: can't set bindInterface while pinger is running.");
+            }
+        }
+        else {
+            _bindInterface = bindInterface;
+        }
+    }
+}
+
+- (NSString *)bindInterface {
+    @synchronized(self) {
+        if (!_bindInterface) {
+            return nil;
+        }
+        else {
+            return _bindInterface;
         }
     }
 }
@@ -341,6 +367,13 @@ static NSTimeInterval const kDefaultTimeout =           2.0;
         if (self.ttl) {
             u_char ttlForSockOpt = (u_char)self.ttl;
             setsockopt(self.socket, IPPROTO_IP, IP_TTL, &ttlForSockOpt, sizeof(NSUInteger));
+        }
+        
+        // bind interface on the socket
+        NSString *interface = self.bindInterface;
+        if (interface) {
+            int ifIndex = if_nametoindex([interface cStringUsingEncoding:NSUTF8StringEncoding]);
+            setsockopt(self.socket, IPPROTO_IP, IP_BOUND_IF, &ifIndex, sizeof(ifIndex));
         }
         
         //we are ready now
