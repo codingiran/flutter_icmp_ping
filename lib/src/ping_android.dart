@@ -11,11 +11,18 @@ import 'package:flutter_icmp_ping/src/models/ping_summary.dart';
 
 class PingAndroid extends BasePing {
   PingAndroid(String host, int? count, double? interval, double? timeout,
-      bool? ipv6, int? ttl)
-      : super(host, count, interval, timeout, ipv6, ttl);
+      bool? ipv6, int? ttl, String? interface)
+      : super(
+      host,
+      count,
+      interval,
+      timeout,
+      ipv6,
+      ttl,
+      interface);
 
   static final _resRegex =
-      RegExp(r'from (.*): icmp_seq=(\d+) ttl=(\d+) time=((\d+).?(\d+))');
+  RegExp(r'from (.*): icmp_seq=(\d+) ttl=(\d+) time=((\d+).?(\d+))');
   static final _seqRegex = RegExp(r'icmp_seq=(\d+)');
   static final _summaryRegexes = [
     RegExp(r'(\d+) packets transmitted'),
@@ -35,6 +42,7 @@ class PingAndroid extends BasePing {
     if (timeout != null) params.add('-W $timeout');
     if (interval != null) params.add('-i $interval');
     if (ttl != null) params.add('-t $ttl');
+    if (interface != null) params.add('-I $interface');
     _process = await Process.start(
         (ipv6 ?? false) ? 'ping6' : 'ping', [...params, host]);
     if (_process == null) {
@@ -58,7 +66,7 @@ class PingAndroid extends BasePing {
 
   /// StreamTransformer for Android response from process stdout/stderr.
   static final StreamTransformer<String, PingData> _androidTransformer =
-      StreamTransformer.fromHandlers(
+  StreamTransformer.fromHandlers(
     handleData: (data, sink) {
       if (data.contains('unreachable')) {
         sink.add(
@@ -91,7 +99,7 @@ class PingAndroid extends BasePing {
               time: time == null
                   ? null
                   : Duration(
-                      microseconds: ((double.parse(time)) * 1000).floor()),
+                  microseconds: ((double.parse(time)) * 1000).floor()),
             ),
           ),
         );

@@ -9,8 +9,15 @@ import 'package:flutter_icmp_ping/src/models/ping_summary.dart';
 
 class PingiOS extends BasePing {
   PingiOS(String host, int? count, double? interval, double? timeout,
-      bool? ipv6, int? ttl)
-      : super(host, count, interval, timeout, ipv6, ttl);
+      bool? ipv6, int? ttl, String? interface)
+      : super(
+      host,
+      count,
+      interval,
+      timeout,
+      ipv6,
+      ttl,
+      interface);
 
   static const _channelName = 'flutter_icmp_ping';
   static const _methodCh = MethodChannel('$_channelName/method');
@@ -43,6 +50,7 @@ class PingiOS extends BasePing {
       'timeout': timeout,
       'ipv6': ipv6,
       'ttl': ttl,
+      'interface': interface,
     });
   }
 
@@ -57,7 +65,7 @@ class PingiOS extends BasePing {
 
   /// StreamTransformer for iOS response from the event channel.
   final StreamTransformer<dynamic, Map<int, PingData>> _iosTransformer =
-      StreamTransformer.fromHandlers(
+  StreamTransformer.fromHandlers(
     handleData: (data, sink) {
       PingError? err;
       switch (data['error']) {
@@ -76,7 +84,7 @@ class PingiOS extends BasePing {
           ttl: data['ttl'],
           time: Duration(
               microseconds:
-                  (data['time'] * Duration.microsecondsPerSecond).floor()),
+              (data['time'] * Duration.microsecondsPerSecond).floor()),
         );
       }
       PingSummary? summary;
@@ -86,7 +94,7 @@ class PingiOS extends BasePing {
           transmitted: data['transmitted'],
           time: Duration(
               microseconds:
-                  (data['time'] * Duration.microsecondsPerSecond).floor()),
+              (data['time'] * Duration.microsecondsPerSecond).floor()),
         );
       }
       sink.add({
