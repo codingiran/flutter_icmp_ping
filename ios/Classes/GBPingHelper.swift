@@ -25,6 +25,7 @@ public class GBPingHelper: NSObject {
     if ttl > 0 {
       ping.ttl = ttl
     }
+    ping.bindInterface = interface
 
     delegate.handler = handler
     ping.delegate = delegate
