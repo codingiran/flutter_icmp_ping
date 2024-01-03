@@ -19,7 +19,7 @@ export 'package:flutter_icmp_ping/src/models/ping_summary.dart';
 class Ping {
   Ping(String host,
       {int? count, double? interval, double? timeout, bool? ipv6, int? ttl, String? interface}) {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
       _ping = PingiOS(
           host,
           count,

@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
     void startPing() async {
       try {
         ping = Ping(
-          'google.com',
-          count: 3,
+          'apple.com',
+          count: 10,
           timeout: 1,
           interval: 1,
           ipv6: false,

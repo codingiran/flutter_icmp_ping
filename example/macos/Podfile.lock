@@ -1,0 +1,22 @@
+PODS:
+  - flutter_icmp_ping (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+
+DEPENDENCIES:
+  - flutter_icmp_ping (from `Flutter/ephemeral/.symlinks/plugins/flutter_icmp_ping/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+
+EXTERNAL SOURCES:
+  flutter_icmp_ping:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_icmp_ping/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+
+SPEC CHECKSUMS:
+  flutter_icmp_ping: d2c80b2f1e637c9f51c4547e9b9cf7dbb71c592c
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
+
+COCOAPODS: 1.14.3
